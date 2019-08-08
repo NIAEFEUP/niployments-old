@@ -1,0 +1,15 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: koalaman/shellcheck-alpine:stable
+        steps:
+            - run:
+                name: Install dependencies
+                # git is needed by CircleCI to clone the repo
+                # make is needed by the lint shell scripts stuff (only that for now, maybe more later)
+                command: apk add git make
+            - checkout
+            - run:
+                name: Lint Shell Scripts
+                command: make lint-shell-scripts

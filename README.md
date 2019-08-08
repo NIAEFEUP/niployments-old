@@ -1,4 +1,5 @@
 # niployments
+[![CircleCI](https://circleci.com/gh/NIAEFEUP/niployments/tree/master.svg?style=svg)](https://circleci.com/gh/NIAEFEUP/niployments/tree/master)
 
 Repository to manage and document NIAEFEUP's deployments.
 
