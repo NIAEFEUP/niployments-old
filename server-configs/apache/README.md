@@ -8,6 +8,9 @@ Requires that niserver has apache2 and bash installed, as one would expect :upsi
 
 Current apache version (will probably quickly become outdated, verify this always before relying on it): 2.4.29
 
+Since the configs were changed to become more modular, they also require the configuration of apache envvars to work correctly.
+See [configuring apache envvars](#configuring-apache-envvars) for details on how to do this.
+
 
 ## Structure
 
@@ -43,9 +46,14 @@ To update the server configs, just run the provided `update_apache_config.sh` sc
 Consult if the startup was successful using `systemctl status apache2`.
 
 
----
+## Configuring apache envvars
 
-TODO:
+The configuration of some apache envvars is necessary for these configurations to work as expected.
+They should be configured in `/etc/apache2/envvars` (the default apache envvars file). See [this for details](https://geek-university.com/apache/envvars-file/) (or google `apache envvars`).
 
-- rename sites (000 stuff to something decent)
-- think about the best arch in terms of where the config-modules files should be and where they should be referenced -> when to use env vars too
+They are the following:
+
+- `CONFIG_MODULES_DIR` - The directory in which the files in `config-modules` are stored, so that they can be included in the site defition files.
+- `CERTIFICATES_DIR` - The directory where SSL certificates and such are stored (probably something like `/home/ni/certificates/`).
+- `DEPLOYMENTS_DIR` - The directory where the autodeployed projects are - used for creation of routes (`config-modules/routing.conf`) for statically served sites (such as built front-ends). Used to be `/home/ni/git` if you know what I mean. The projects can also hardcode paths in the server, but I'd rather everything used the autodeploy resulting from this repo.
+
