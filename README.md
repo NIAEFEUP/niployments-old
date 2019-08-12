@@ -12,12 +12,24 @@ This will make them more accessible (scary, but probably good) and let's not for
 
 ## Contents
 
-This repo will contain the configurations of the branch's _production_ web server, some configs for CD by tracking the `master` branch of some repos (either via `cron` or webhooks, under discussion) and other notes that might be relevant.
+- `server-configs` - Configurations of niserver (such as apache configs, for example)
+- `utils` - Random (bash) utils
+- `deployments` - Configuration for deployment of ni projects
+- `slack` - Utilities for communicating with Slack
+
+This repo will contain the configurations of the branch's _production_ web server (niserver), some configs for CD by tracking the `master` branch of some repos (either via `cron` or webhooks, under discussion) and other notes that might be relevant.
 
 ## Continuous Deployment
 
-CD will be setup. In order to be eligible to do so, a project must include a `deploy.sh` script and get in touch with the current maintainer of this project (in case of doubt, yell in Slack).
+CD will be setup. In order to be eligible to do so, a project must follow certain criteria:
+- Include a `deploy.sh` script for updating the current deployment
+- Have branch protection rules in place for at least the `master` branch (really don't want to handle broken deploys :( )
+- Finally, get in touch with the current maintainer of this project (in case of doubt, yell in Slack).
+
 This project must also have a path (and port, if necessary) allocated to it (will be documented here, hopefully).
+
+For further details, take a look at `deployments/`.
+
 
 ## Secret Management
 
