@@ -7,4 +7,8 @@ contains() {
     [[ "$1" =~ (^|[[:space:]])"$2"($|[[:space:]]) ]]
 }
 
-export -f contains
+has_docker() {
+    [[ $(command -v docker) ]] && docker --version | grep -q 'Docker version'
+}
+
+export -f contains has_docker

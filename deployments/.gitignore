@@ -1,0 +1,8 @@
+# Ignoring everything except our deploy scripts and README to prevent accidental committing of stuff
+# (Yes, even directories, especially directories)
+*
+!deploy.sh
+!deploy-types.sh
+!README.md
+# Well and gitignore, otherwise this wouldn't work now, would it?
+!.gitignore
