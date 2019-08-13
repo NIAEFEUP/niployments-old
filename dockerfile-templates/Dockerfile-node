@@ -1,0 +1,23 @@
+# See something like: https://dev.to/alex_barashkov/using-docker-for-nodejs-in-development-and-production-3cgp (check for being up to date and fact check stuff too, not saying that this is good or correct, just listing a possible reference)
+
+FROM node:10.16.2-alpine
+
+# No need to mkdir as it is already done when calling WORKDIR
+# This is arbitrary, really, tbh
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json ./
+RUN npm install --production
+
+# Assuming all of the necessary source is under src
+# Other config files such as .eslintrc and test files should be avoided in COPY in order to make the image as small as possible (better for performance reasons)
+COPY src/ ./
+
+# Possibly also copy and environment file if it is necessary for the app to run
+COPY .env ./
+
+# In production, at least for these environments, we want to always expose port 80 and then map it when using docker run by using `-p`
+EXPOSE 80
+
+# Assuming this command exists and starts the server in port 80 and in the production environment
+CMD [ "npm", "run", "prod" ]

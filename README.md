@@ -15,6 +15,7 @@ This will make them more accessible (scary, but probably good) and let's not for
 - `server-configs` - Configurations of niserver (such as apache configs, for example)
 - `utils` - Random (bash) utils
 - `deployments` - Configuration for deployment of ni projects
+- `dockerfile-templates` - Templates of production-ready Dockerfiles, to use in projects to then be used by `deployments`
 - `slack` - Utilities for communicating with Slack
 
 This repo will contain the configurations of the branch's _production_ web server (niserver), some configs for CD by tracking the `master` branch of some repos (either via `cron` or webhooks, under discussion) and other notes that might be relevant.
@@ -23,7 +24,7 @@ This repo will contain the configurations of the branch's _production_ web serve
 
 CD will be setup. In order to be eligible to do so, a project must follow certain criteria:
 - Have branch protection rules in place for at least the `master` branch (really don't want to handle broken deploys :( )
-- Include a `Dockerfile-prod` that when built and ran will expose a running server to a certain port (`.env` or always 80 and remapped?)
+- Include a `Dockerfile-prod` that when built and ran will expose a running server to port 80 (which is then remapped in the `docker run` command) - some examples are available in `dockerfile-templates`
 - Finally, get in touch with the current maintainer of this project (should be the deployers github team - but in case of doubt, yell in Slack).
 
 This project must also have a path (and port, if necessary) allocated to it (which will be documented in `server-configs`, hopefully).
@@ -34,3 +35,7 @@ For further details, take a look at `deployments/`.
 ## Secret Management
 
 Obviously, especially since this not a private repo (and even if it were!) secrets are not to be used here. Instead investigate solutions like using environment variables or relying on local configuration files (such as `.env`s, for example).
+
+
+---
+TODO: Add port configs to `server-configs` as an assoc array probably, so that they can be used by `deployments`
