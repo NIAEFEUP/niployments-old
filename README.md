@@ -22,11 +22,11 @@ This repo will contain the configurations of the branch's _production_ web serve
 ## Continuous Deployment
 
 CD will be setup. In order to be eligible to do so, a project must follow certain criteria:
-- Include a `deploy.sh` script for updating the current deployment
 - Have branch protection rules in place for at least the `master` branch (really don't want to handle broken deploys :( )
-- Finally, get in touch with the current maintainer of this project (in case of doubt, yell in Slack).
+- Include a `Dockerfile-prod` that when built and ran will expose a running server to a certain port (`.env` or always 80 and remapped?)
+- Finally, get in touch with the current maintainer of this project (should be the deployers github team - but in case of doubt, yell in Slack).
 
-This project must also have a path (and port, if necessary) allocated to it (will be documented here, hopefully).
+This project must also have a path (and port, if necessary) allocated to it (which will be documented in `server-configs`, hopefully).
 
 For further details, take a look at `deployments/`.
 

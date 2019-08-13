@@ -7,11 +7,15 @@
 # See https://sipb.mit.edu/doc/safe-shell/
 set -ueo pipefail
 
+# Adaptation of https://stackoverflow.com/questions/192292/how-best-to-include-other-scripts
+curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
+
 project="${1:-}"
-branch="master"
+branch="${2:-master}"
 
 # shellcheck source=utils/utils.sh
-source ../utils/utils.sh
+source "$curr_dir/../utils/utils.sh"
 
 # List of git id name thing of the projects configured for autodeploy
 configured_projects="NIAEFEUP-Website tts-fe nijobs-fe nijobs-be"
@@ -27,7 +31,15 @@ if ! has_docker; then
     exit 2
 fi
 
-cd "$project"
+## Sourcing files here because otherwise the directory will change and will no longer work
+# Getting deployment types definitions
+# shellcheck source=deployments/deploy-types.sh
+source "$curr_dir/deploy-types.sh"
+# Get slack messaging functions
+# shellcheck source=slack/messaging.sh
+source "$curr_dir/../slack/messaging.sh"
+
+pushd "$project" > /dev/null
 if ! MSG="$(git fetch origin 2>&1)"; then
     >&2 echo "-> Problem in git fetch on $project"
     >&2 echo "$MSG"
@@ -35,32 +47,28 @@ if ! MSG="$(git fetch origin 2>&1)"; then
 fi
 
 # Ensuring up to date with remote (correct branch and latest commit, discarding all local changes)
-git checkout --force --quite "$branch"
+git checkout --force --quiet "$branch"
 git reset --hard --quiet "origin/$branch"
 
-logfile="$(mktemp deploylog.XXXXXX.txt)"
+logfile="$(mktemp --tmpdir niployments-log.XXXXXX.txt)"
 rev="$(git rev-parse --short "origin/$branch")"
 branch_at_rev="$branch@$rev"
-
-# Getting deployment types definitions
-# shellcheck source=deployments/deploy-types.sh
-source ./deploy-types.sh
 
 set +e
 (
     echo "###-> Deploying $project at $branch_at_rev"
     echo
 
-    # IMPORTANT: Make sure to update this with the added projects' type and add other deploy-type-functions if necessary (in deploy-types/)!
-    if [ "$project" = "tts-fe" ] || [ "$project" = "nijobs-fe" ]; then
-	deploy_static_build "$project" "$branch"
-    else
-	deploy_running "$project" "$branch"
-    fi
+    deploy_default "$project" "$branch"
 ) 2>&1 | tee "$logfile"
-set -e
 
-deploy_status="$?"
+# This gets the return status of the first element of the previous pipe, aka the subshell executing the deployment commands
+deploy_status="${PIPESTATUS[0]}"
+set -e
+# Exiting the project, back to the original folder (probably deployments but might be another one, irrelevant)
+popd > /dev/null
+
+echo "Deployment exit status: $deploy_status"
 
 # Building slack message
 if [[ "$deploy_status" == "0" ]]; then
@@ -70,11 +78,7 @@ else
 fi
 
 ## Send slack message
-
-# Get slack messaging functions
-# shellcheck source=slack/messaging.sh
-source ../slack/messaging.sh
-
+echo "Sending slack message with deployments information"
 slack_response="$(send_text_file_message "$message" "$logfile")"
 
 echo "Slack Response:"
@@ -82,4 +86,4 @@ echo "$slack_response"
 
 rm -rf "$logfile"
 
-exit $deploy_status
+exit "$deploy_status"

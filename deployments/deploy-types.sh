@@ -6,57 +6,49 @@
 # See https://sipb.mit.edu/doc/safe-shell/
 set -ueo pipefail
 
-# For projects that only need their assets to be built and can then be served by an apache server
-# (for example, and what is currently configured so let's roll with it instead of using docker images with nginx inside of them too... spaghet)
-function deploy_static_build() {
-    local project="$1" branch="$2" image_tag="$project:$branch"
+# For deploying stuff with docker, simply put.
+function deploy_default() {
+    local project="$1" branch="$2" image_tag="$project---$branch"
 
+    # Grabbing the image id from the previous build
+    # In case of run failure, we will retag the old image and in case of run success, remove it using `docker rmi`
+    local old_image_id
+    old_image_id="$(docker images -q "$image_tag")"
+    # Grabbing the container id that is currently running an image with the project+branch tag
+    local old_container_id
+    old_container_id="$(docker ps -aq --filter ancestor="$image_tag")"
+
+    echo -e "Starting docker build\n"
     docker build -f Dockerfile-prod -t "$image_tag" .
-
-    # Early returns using the status of build and of run to prevent removal of potentially relevant things
     local build_status="$?"
     if [ "$build_status" != 0 ]; then
+	>&2 echo -e "\n###-> ERROR! Build failed! Aborting deployment!"
 	return "$build_status"
     fi
 
-    mkdir -p build
-    # Using --cidfile to store the pid of the running container
-    docker run --cidfile build.cid 
+    # Stopping old docker container and waiting for it to exit
+    echo -e "\n###-> Build done. Stopping old container and waiting for it to exit\n"
+    docker stop "$old_container_id"
+    docker wait "$old_container_id"
+    
+    echo -e "\n###-> Old container stopped, running new one\n"
+    docker run -d --restart=unless-stopped "$image_tag"
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
+	>&2 echo -e "\n###-> ERROR! Run failed!"
+	>&2 echo "###-> Retagging old image and starting old container back up"
+	docker tag "$old_image_id" "$image_tag"
+	docker start "$old_container_id"
 	return "$run_status"
     fi
 
-    # Assuming the Dockerfile-prod specified above uses WORKDIR /web/
-    docker cp "$(cat build.cid):/web/build/" .
-    # The built files are now available in ./build/ - ready to be served via a webserver like apache or nginx or any other similar solution
-
     # Cleanup
-    # Removes the running container
-    docker rm -f "$(cat build.cid)"
-    rm -f build.cid
-    # Removes the image used to run the container
-    docker rmi -f "$image_tag"
+    echo -e "\n###-> New container now running successfuly, removing old container and image!"
+    docker rm "$old_container_id"
+    docker rmi "$old_image_id"
+    
+    return "$run_status"
 }
 
-# For projects that need to be running a daemon of some sort (such as back-ends and server-side rendering)
-function deploy_running() {
-    local project="$1" branch="$2" image_tag="$project:$branch"
+export -f deploy_default
 
-    docker build -f Dockerfile-prod -t "$image_tag" .
-
-    # Early returns using the status of build and of run to prevent removal of potentially relevant things
-    local build_status="$?"
-    if [ "$build_status" != 0 ]; then
-	return "$build_status"
-    fi
-
-    # Remove previously running container
-    # TODO
-
-    # Run app as daemon that will remove its own container on exit
-    docker run -d --rm "$image_tag"
-
-}
-
-export -f deploy_static_build deploy_running
