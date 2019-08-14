@@ -79,7 +79,7 @@ fi
 
 ## Send slack message
 echo "Sending slack message with deployments information"
-slack_response="$(send_text_file_message "$message" "$logfile")"
+slack_response="$(send_file_message "$message" "$logfile")"
 
 echo "Slack Response:"
 echo "$slack_response"
