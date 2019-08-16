@@ -7,6 +7,10 @@ FROM node:10.16.2-alpine
 WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
+
+# Because colors break logs
+ENV NPM_CONFIG_COLOR=false
+
 RUN npm install --production
 
 # Assuming all of the necessary source is under src

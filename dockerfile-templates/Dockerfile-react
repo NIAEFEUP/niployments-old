@@ -6,10 +6,16 @@ FROM node:10.16.2-alpine as build
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 
+# Because colors break logs
+ENV NPM_CONFIG_COLOR=false
+
 # Production or not doesn't really matter as this image will not be used other than for building
 RUN npm install
 
-COPY src/ ./
+# Necessary files for building the app
+COPY public/ public/
+
+COPY src/ src/
 
 # Building the image
 RUN npm run build
