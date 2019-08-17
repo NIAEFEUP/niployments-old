@@ -4,5 +4,7 @@
 !deploy.sh
 !deploy-types.sh
 !README.md
+# Also, the project configurations!
+!project-configs.sh
 # Well and gitignore, otherwise this wouldn't work now, would it?
 !.gitignore

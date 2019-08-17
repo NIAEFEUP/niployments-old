@@ -8,7 +8,11 @@ set -ueo pipefail
 
 # For deploying stuff with docker, simply put.
 function deploy_default() {
-    local project="$1" branch="$2" image_tag="$project---$branch"
+    # (dotenv_location is not mandatory)
+    local project="$1" branch="$2" image_tag="$project---$branch" port="$3" dotenv_location="${4:-}"
+
+    # If we have a dotenv file specified, copy it into the current directory (in case of error, `cp` prints something so no need to echo anything)
+    [[ -n "$dotenv_location" ]] && cp "$dotenv_location" . && echo "#-> Copied dotenv file successfully"
 
     # Grabbing the image id from the previous build
     # In case of run failure, we will retag the old image and in case of run success, remove it using `docker rmi`
@@ -42,8 +46,8 @@ function deploy_default() {
 	echo "###-> No container was previously running! Continuing..."
     fi    
 
-    echo -e "###-> Running new container\n"
-    docker run -d --restart=unless-stopped "$image_tag"
+    echo -e "###-> Running new container\n#-> Will listen on port $port!\n"
+    docker run -d --restart=unless-stopped -p "$port:80" "$image_tag"
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
 	>&2 echo -e "\n###-> ERROR! Run failed!"
