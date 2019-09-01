@@ -11,7 +11,7 @@ set -ueo pipefail
 curr_dir="${BASH_SOURCE%/*}"
 if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
 
-project="${1:-}"
+project="${1:?Project argument is mandatory and was not given\!}"
 branch="${2:-master}"
 
 # shellcheck source=utils/utils.sh
@@ -31,6 +31,15 @@ if ! has_docker; then
     exit 2
 fi
 
+# Ensuring that deploys of the same project do not trample each other
+# See https://mywiki.wooledge.org/BashFAQ/045
+exec 9>"/tmp/niployments-$project-deploy.lock"
+if ! flock -n 9; then
+    echo "Another instance of the deployment scripts is already running for $project"
+    echo "Exiting in order to not trample myself!"
+    exit 3
+fi
+
 ## Sourcing files here because otherwise the directory will change and will no longer work
 # Getting deployment types definitions
 # shellcheck source=deployments/deploy-types.sh
@@ -46,7 +55,7 @@ pushd "$project" > /dev/null
 if ! MSG="$(git fetch origin 2>&1)"; then
     >&2 echo "-> Problem in git fetch on $project"
     >&2 echo "$MSG"
-    exit 3
+    exit 4
 fi
 
 # Ensuring up to date with remote (correct branch and latest commit, discarding all local changes)
