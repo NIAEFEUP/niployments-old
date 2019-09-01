@@ -15,7 +15,7 @@ RUN npm install --production
 
 # Assuming all of the necessary source is under src
 # Other config files such as .eslintrc and test files should be avoided in COPY in order to make the image as small as possible (better for performance reasons)
-COPY src/ ./
+COPY src/ src/
 
 # Possibly also copy and environment file if it is necessary for the app to run
 COPY .env ./
