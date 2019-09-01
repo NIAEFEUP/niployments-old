@@ -31,61 +31,61 @@ function deploy_default() {
     # docker image prune -f --filter label=stage=builder
 
     if [ "$build_status" != 0 ]; then
-	>&2 echo -e "\n###-> ERROR! Build failed! Aborting deployment!"
-	return "$build_status"
+	    >&2 echo -e "\n###-> ERROR! Build failed! Aborting deployment!"
+	    return "$build_status"
     fi
 
     # Stopping old docker container and waiting for it to exit
     echo -e "\n###-> Build done. Stopping old container and waiting for it to exit\n"
     if [[ -n "$old_container_id" ]]; then
-	docker stop "$old_container_id" &>/dev/null
-	printf "old container exit code: "
-	docker wait "$old_container_id"
-	echo -e "\n###-> Old container stopped.\n"
+        docker stop "$old_container_id" &>/dev/null
+    	printf "old container exit code: "
+    	docker wait "$old_container_id"
+    	echo -e "\n###-> Old container stopped.\n"
     else
-	echo "###-> No container was previously running! Continuing..."
+	    echo "###-> No container was previously running! Continuing..."
     fi    
 
     echo -e "###-> Running new container\n#-> Will listen on port $port!\n"
-    docker run -d --restart=unless-stopped -p "$port:80" "$image_tag"
+    docker run -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
-	>&2 echo -e "\n###-> ERROR! Run failed!"
-	>&2 echo "###-> Retagging old image and starting old container back up"
-	if [[ -n "$old_image_id" ]]; then
-	    docker tag "$old_image_id" "$image_tag"
-	else
-	    echo "###->> No old image found for retagging!!"
-	fi
-	if [[ -n "$old_container_id" ]]; then
-	    docker start "$old_container_id"
-	else
-	    echo "###->> No old container found for starting back up!!"
-	fi
-	return "$run_status"
+        >&2 echo -e "\n###-> ERROR! Run failed!"
+        >&2 echo "###-> Retagging old image and starting old container back up"
+        if [[ -n "$old_image_id" ]]; then
+            docker tag "$old_image_id" "$image_tag"
+        else
+            echo "###->> No old image found for retagging!!"
+        fi
+        if [[ -n "$old_container_id" ]]; then
+            docker start "$old_container_id"
+        else
+            echo "###->> No old container found for starting back up!!"
+        fi
+        return "$run_status"
     fi
 
     # Cleanup
     echo -e "\n###-> New container now running successfuly, removing old container and image!"
     if [[ -n "$old_container_id" ]]; then
-	printf "old container id: "
-	docker rm "$old_container_id"
+    	printf "old container id: "
+    	docker rm "$old_container_id"
     else
-	echo "###-> No old container was running, so none removed."
+	    echo "###-> No old container was running, so none removed."
     fi
+
     if [[ -n "$old_image_id" ]]; then
-	if [[ "$(docker images -q "$image_tag")" == "$old_image_id" ]]; then
-	    echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
-	else
-	    printf "old image id: "
-            docker rmi "$old_image_id"
-	fi
+	    if [[ "$(docker images -q "$image_tag")" == "$old_image_id" ]]; then
+	        echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
+	    else
+	        printf "old image id: "
+           docker rmi "$old_image_id"
+	    fi
     else
-	echo "###-> No old image found, so none removed."
+	    echo "###-> No old image found, so none removed."
     fi
 
     return "$run_status"
 }
 
 export -f deploy_default
-

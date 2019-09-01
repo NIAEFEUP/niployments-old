@@ -9,6 +9,7 @@ Besides ensuring the project complies with the rules specified in the root READM
 1. `git clone` the repository into this directory
 1. Update the the list of configured projects (check deploy.sh for usages)
 1. Configure the necessary dependencies and `.env*` variables for the project's correct deployments
+1. Update the configs in `./project-configs.sh` (allocated port and location of .env file - optional but recommended, see below for details)
 1. Update the configs found in `../server-configs` if necessary (such as apache routes or port mappings, for example)
 
 The rest should be handled by the scripts' modularity (hopefully).
@@ -19,7 +20,7 @@ Each project's _`.env` file_ and _exposed port_ must be documented in `project-c
 
 The `port` is mandatory, but the `env_file_path` is optional (for projects that might not make use of one).
 
-The paths provided in said file **MUST** be **absolute** (trust me you don't want to handle bash's path spaghetti :wink:).
+The paths provided in said file **MUST** be **absolute** (trust me you don't want to handle bash's path spaghetti :upside_down_face: :wink:).
 
 ## Notes
 

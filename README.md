@@ -8,7 +8,7 @@ Repository to manage and document NIAEFEUP's deployments.
 > "It's 2019 and we are still manually `ssh`'ing into a machine instead of using fancy stuff that will also inevitably break!"
 
 The objective is to have a place for not only backing up, but also generally version controlling server configs.
-This will make them more accessible (scary, but probably good) and let's not forget that [bugs are shallow](https://en.wikipedia.org/wiki/Linus%27s_Law).
+This will make them more accessible (scary, but probably good) - let's not forget that [bugs are shallow](https://en.wikipedia.org/wiki/Linus%27s_Law).
 
 ## Contents
 
@@ -23,19 +23,20 @@ This repo will contain the configurations of the branch's _production_ web serve
 ## Continuous Deployment
 
 CD will be setup. In order to be eligible to do so, a project must follow certain criteria:
+
 - Have branch protection rules in place for at least the `master` branch (really don't want to handle broken deploys :( )
-- Include a `Dockerfile-prod` that when built and ran will expose a running server to port 80 (which is then remapped in the `docker run` command) - some examples are available in `dockerfile-templates`
+- Provide a `Dockerfile-prod` that when built and ran exposes a running server to port 80 (which is then remapped in the `docker run` command) - there are some examples available in `dockerfile-templates/`
+    * A `PORT` env variable with the value of `80` will also be passed when running, so you can also rely on that if you ensure that that works.
+    * Simillarly, it is also possible to rely on `.env*` configuration files (mapped in `deployments/project-configs.sh`)
 - Finally, get in touch with the current maintainer of this project (should be the deployers github team - but in case of doubt, yell in Slack).
 
-This project must also have a path (and port, if necessary) allocated to it (which will be documented in `server-configs`, hopefully).
+**Note:** Currently all of the projects must be running a daemon exposing a port. Static builds should use something like nginx to expose the built files. (See `dockerfile-templates/Dockerfile-react` as an example of this)
+
+The project to deploy must also have a path (URI) and port allocated to it (which will be documented in `server-configs`, hopefully - or at least in `deployments/project-configs` (PORT) and in `server-configs/apache/config-modules/routing.conf` (URI)). Again, in case of doubt: bother people.
 
 For further details, take a look at `deployments/`.
 
 
 ## Secret Management
 
-Obviously, especially since this not a private repo (and even if it were!) secrets are not to be used here. Instead investigate solutions like using environment variables or relying on local configuration files (such as `.env`s, for example).
-
-
----
-TODO: Add port configs to `server-configs` as an assoc array probably, so that they can be used by `deployments`
+Obviously, especially since this not a private repo (and even if it were!) secrets are not to be used here. Instead use other options such as environment variables or relying on local configuration files (such as `.env`s, for example).

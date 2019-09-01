@@ -55,11 +55,10 @@ git reset --hard --quiet "origin/$branch"
 
 logfile="$(mktemp --tmpdir niployments-log.XXXXXX.txt)"
 rev="$(git rev-parse --short "origin/$branch")"
-branch_at_rev="$branch@$rev"
 
 set +e
 (
-    echo "###-> Deploying $project at $branch_at_rev"
+    echo "###-> Deploying $project at $branch@$rev"
     echo
     
     # Passing in the configs from ./project-configs.sh. dotenv_location might not be set so sending instead an empty variable ("") so that the 'unbound variable' error does not occur
@@ -75,10 +74,12 @@ popd > /dev/null
 echo "Deployment exit status: $deploy_status"
 
 # Building slack message
+project_branch_rev_info="*$project* from "'`'"$branch"'`'" at "'`'"$rev"'`'
+
 if [[ "$deploy_status" == "0" ]]; then
-    message=":ship: Deployed *$project* at "'`'"$branch_at_rev"'`'
+    message=":ship: Deployed $project_branch_rev_info"
 else
-    message=":exploding_head: Failed to deploy *$project* at "'`'"$branch_at_rev"'`'", return code: $deploy_status"
+    message=":exploding_head: Failed to deploy $project_branch_rev_info, return code: $deploy_status"
 fi
 
 ## Send slack message
