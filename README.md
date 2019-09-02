@@ -18,7 +18,7 @@ This will make them more accessible (scary, but probably good) - let's not forge
 - `dockerfile-templates` - Templates of production-ready Dockerfiles, to use in projects to then be used by `deployments`
 - `slack` - Utilities for communicating with Slack
 
-This repo will contain the configurations of the branch's _production_ web server (niserver), some configs for CD by tracking the `master` branch of some repos (either via `cron` or webhooks, under discussion) and other notes that might be relevant.
+This repo will contain the configurations of the branch's _production_ web server (niserver), some configs for CD by tracking the `master` branch of some repos (via `cron` - webhooks would be more trouble than it's worth) and other notes that might be relevant.
 
 ## Continuous Deployment
 

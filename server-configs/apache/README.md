@@ -53,7 +53,5 @@ They should be configured in `/etc/apache2/envvars` (the default apache envvars 
 
 They are the following:
 
-- `CONFIG_MODULES_DIR` - The directory in which the files in `config-modules` are stored, so that they can be included in the site defition files.
+- `CONFIG_MODULES_DIR` - The directory in which the files in `config-modules` are stored, so that they can be included in the site definition files.
 - `CERTIFICATES_DIR` - The directory where SSL certificates and such are stored (probably something like `/home/ni/certificates/`).
-- `DEPLOYMENTS_DIR` - The directory where the autodeployed projects are - used for creation of routes (`config-modules/routing.conf`) for statically served sites (such as built front-ends). Used to be `/home/ni/git` if you know what I mean. The projects can also hardcode paths in the server, but I'd rather everything used the autodeploy resulting from this repo.
-

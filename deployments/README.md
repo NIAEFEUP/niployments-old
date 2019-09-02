@@ -25,3 +25,6 @@ The paths provided in said file **MUST** be **absolute** (trust me you don't wan
 ## Notes
 
 `docker system prune` should be ran periodically to clean up dangling images and containers. The deployment scripts attempt to minimize the number of these but some are left on purpose due to speeding up multi-stage builds.
+
+The containers cannot connect to `localhost` - to enable that they would have to be running in host network mode, which would complicate port mapping in things like nginx containers, which do not provide this easily.  
+In order to connect to other docker containers, use `docker network` and manage the networks using that. This will probably break in each deployment, as the container will change, but it is the best solution I can come up with for now. In the future this should be improved though, obviously.

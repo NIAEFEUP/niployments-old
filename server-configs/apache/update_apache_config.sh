@@ -7,12 +7,11 @@ set -ueo pipefail
 
 # Disabling the currently existing sites (so that they are not lost, but do not interfer with the configurations, which should all be done using this tool)
 # This finds all the sites (files) in sites-available and gets their basename (file name without path) to pass to a2dissite (thus disabling them)
-find /etc/apache2/sites-available/ -type f -print0 | xargs -0 basename -a | xargs a2dissite &> /dev/null
+find /etc/apache2/sites-available/ -type f -print0 | xargs -0 basename -a | sudo xargs a2dissite &> /dev/null
 
 # To verify if they exist
 unset CONFIG_MODULES_DIR
 unset CERTIFICATES_DIR
-unset DEPLOYMENTS_DIR
 
 ## It is necessary to get the apache environment variables specified in the README
 
@@ -28,7 +27,7 @@ source /etc/apache2/envvars
 set -u
 
 # Checking envvars definition
-if [[ -z "${CONFIG_MODULES_DIR:-}" ]] || [[ -z "${CERTIFICATES_DIR:-}" ]] || [[ -z "${DEPLOYMENTS_DIR:-}" ]]; then
+if [[ -z "${CONFIG_MODULES_DIR:-}" ]] || [[ -z "${CERTIFICATES_DIR:-}" ]]; then
     echo "Error: At least one of the environment variables specified in the README is not configured."
     exit 1
 fi
