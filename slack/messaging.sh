@@ -31,4 +31,16 @@ function send_file_message() {
     | jq .
 }
 
-export -f send_file_message
+function send_text_message() {
+    local message="$1"
+
+    exec 2>&1
+    curl --silent \
+    -F "text=$message" \
+    -F channel="$NIPLOYMENTS_CHANNEL" \
+    -H "Authorization: Bearer $(cat "$curr_dir/niployments-bot.slack.token")" \
+    https://slack.com/api/chat.postMessage \
+    | jq .
+}
+
+export -f send_file_message send_text_message
