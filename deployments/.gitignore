@@ -3,6 +3,7 @@
 *
 !deploy.sh
 !deploy-types.sh
+!spam-deploys.sh
 !README.md
 # Also, the project configurations!
 !project-configs.sh
