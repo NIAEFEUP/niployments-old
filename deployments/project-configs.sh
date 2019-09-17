@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# List of git id name thing of the projects configured for autodeploy
+configured_projects="NIAEFEUP-Website tts-fe nijobs-fe nijobs-be"
+
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
 
@@ -34,3 +37,4 @@ project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/e
 # Essential, duh! :)
 export project_port
 export project_dotenv_location
+export configured_projects

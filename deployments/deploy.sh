@@ -24,8 +24,9 @@ branch="${2:-master}"
 # shellcheck source=utils/utils.sh
 source "$curr_dir/../utils/utils.sh"
 
-# List of git id name thing of the projects configured for autodeploy
-configured_projects="NIAEFEUP-Website tts-fe nijobs-fe nijobs-be"
+# Getting project configurations (configured_projects, project_port and project_dotenv_location)
+# shellcheck source=deployments/project-configs.sh
+source "$curr_dir/project-configs.sh"
 
 if ! contains "$configured_projects" "$project"; then
     >&2 echo "Project given to deploy not configured (Received: $project)"
@@ -51,9 +52,6 @@ fi
 # Getting deployment types definitions
 # shellcheck source=deployments/deploy-types.sh
 source "$curr_dir/deploy-types.sh"
-# Getting project configurations (project_port and project_dotenv_location)
-# shellcheck source=deployments/project-configs.sh
-source "$curr_dir/project-configs.sh"
 # Get slack messaging functions
 # shellcheck source=slack/messaging.sh
 source "$curr_dir/../slack/messaging.sh"
