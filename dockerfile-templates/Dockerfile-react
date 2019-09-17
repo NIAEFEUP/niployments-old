@@ -1,0 +1,32 @@
+# Possible reference website: https://mherman.org/blog/dockerizing-a-react-app/
+
+# First, building the static files
+FROM node:10.16.2-alpine as build
+
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+
+# Because colors break logs
+ENV NPM_CONFIG_COLOR=false
+
+# Production or not doesn't really matter as this image will not be used other than for building
+RUN npm install
+
+# Necessary files for building the app
+COPY public/ public/
+
+COPY src/ src/
+
+# Building the image
+RUN npm run build
+
+# Then, use nginx to serve the built files
+# See https://hub.docker.com/_/nginx
+FROM nginx:alpine
+
+# Copying the built files into the nginx image, to the default served directory
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+# If a custom nginx.conf is necessary (for routing some stuff, sometimes React Router has trouble with nginx it seems - should use @reach anyway tbh)
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# No need to expose anything or specify any CMD, as the nginx image already does that, and it is best to not mess with it
