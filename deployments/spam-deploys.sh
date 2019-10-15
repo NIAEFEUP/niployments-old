@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
+
 # Script to be ran by cron in order to periodically deploy NIAEFEUP's projects!
 
 # Add this to cron to be ran every 30 minutes using:
@@ -13,15 +16,15 @@
 # Configure the projects to automatically deploy below here
 
 # nijobs-be
-(./deploy.sh --cron-mode nijobs-be master; ./deploy.sh --cron-mode nijobs-be develop) &
+("$curr_dir/deploy.sh" --cron-mode nijobs-be master; "$curr_dir/deploy.sh" --cron-mode nijobs-be develop) &
 
 # nijobs-fe
-(./deploy.sh --cron-mode nijobs-fe master; ./deploy.sh --cron-mode nijobs-fe develop) &
+("$curr_dir/deploy.sh" --cron-mode nijobs-fe master; "$curr_dir/deploy.sh" --cron-mode nijobs-fe develop) &
 
 # NIAEFEUP-Website
 # Currently on hold until some changes are done
-# (./deploy.sh --cron-mode NIAEFEUP-Website master; ./deploy.sh --cron-mode NIAEFEUP-Website develop) &
+# ("$curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website master; "$curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website develop) &
 
 # tts-fe
 # Currently on hold until the React port is done
-# (./deploy.sh --cron-mode tts-fe master; ./deploy.sh --cron-mode tts-fe develop) &
+# ("$curr_dir/deploy.sh" --cron-mode tts-fe master; "$curr_dir/deploy.sh" --cron-mode tts-fe develop) &
