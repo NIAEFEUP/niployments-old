@@ -7,8 +7,8 @@ set -ueo pipefail
 
 # Adaptation of https://stackoverflow.com/questions/192292/how-best-to-include-other-scripts
 # Necessary because of reading the token below
-curr_dir="${BASH_SOURCE%/*}"
-if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
+slack_curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$slack_curr_dir" ]]; then slack_curr_dir="${0%/*}"; fi
 
 NIPLOYMENTS_CHANNEL='#niployments'
 
@@ -26,7 +26,7 @@ function send_file_message() {
     -F "content=$(cat "$file_path")" \
     -F "initial_comment=$message" \
     -F channels="$NIPLOYMENTS_CHANNEL" \
-    -H "Authorization: Bearer $(cat "$curr_dir/niployments-bot.slack.token")" \
+    -H "Authorization: Bearer $(cat "$slack_curr_dir/niployments-bot.slack.token")" \
     https://slack.com/api/files.upload \
     | jq .
 }
@@ -38,7 +38,7 @@ function send_text_message() {
     curl --silent \
     -F "text=$message" \
     -F channel="$NIPLOYMENTS_CHANNEL" \
-    -H "Authorization: Bearer $(cat "$curr_dir/niployments-bot.slack.token")" \
+    -H "Authorization: Bearer $(cat "$slack_curr_dir/niployments-bot.slack.token")" \
     https://slack.com/api/chat.postMessage \
     | jq .
 }
