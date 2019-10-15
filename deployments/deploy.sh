@@ -56,7 +56,7 @@ source "$curr_dir/deploy-types.sh"
 # shellcheck source=slack/messaging.sh
 source "$curr_dir/../slack/messaging.sh"
 
-pushd "$project" > /dev/null
+pushd "$curr_dir/$project" > /dev/null
 if ! MSG="$(git fetch origin 2>&1)"; then
     >&2 echo "-> Problem in git fetch on $project"
     >&2 echo "$MSG"
