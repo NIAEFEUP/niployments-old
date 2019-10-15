@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-curr_dir="${BASH_SOURCE%/*}"
-if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
+spam_deploys_curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
 
 # Script to be ran by cron in order to periodically deploy NIAEFEUP's projects!
 
@@ -16,15 +16,15 @@ if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
 # Configure the projects to automatically deploy below here
 
 # nijobs-be
-("$curr_dir/deploy.sh" --cron-mode nijobs-be master; "$curr_dir/deploy.sh" --cron-mode nijobs-be develop) &
+("$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be develop) &
 
 # nijobs-fe
-("$curr_dir/deploy.sh" --cron-mode nijobs-fe master; "$curr_dir/deploy.sh" --cron-mode nijobs-fe develop) &
+("$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe develop) &
 
 # NIAEFEUP-Website
 # Currently on hold until some changes are done
-# ("$curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website master; "$curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website develop) &
+# ("$spam_deploys_curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website develop) &
 
 # tts-fe
 # Currently on hold until the React port is done
-# ("$curr_dir/deploy.sh" --cron-mode tts-fe master; "$curr_dir/deploy.sh" --cron-mode tts-fe develop) &
+# ("$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe develop) &

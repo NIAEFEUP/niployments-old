@@ -15,18 +15,18 @@ if [[ "$1" == "--cron-mode" ]]; then
 fi
 
 # Adaptation of https://stackoverflow.com/questions/192292/how-best-to-include-other-scripts
-curr_dir="${BASH_SOURCE%/*}"
-if [[ ! -d "$curr_dir" ]]; then curr_dir="${0%/*}"; fi
+deploy_curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$deploy_curr_dir" ]]; then deploy_curr_dir="${0%/*}"; fi
 
 project="${1:?Project to deploy argument is mandatory and was not given\!}"
 branch="${2:-master}"
 
 # shellcheck source=utils/utils.sh
-source "$curr_dir/../utils/utils.sh"
+source "$deploy_curr_dir/../utils/utils.sh"
 
 # Getting project configurations (configured_projects, project_port and project_dotenv_location)
 # shellcheck source=deployments/project-configs.sh
-source "$curr_dir/project-configs.sh"
+source "$deploy_curr_dir/project-configs.sh"
 
 if ! contains "$configured_projects" "$project"; then
     >&2 echo "Project given to deploy not configured (Received: $project)"
@@ -51,12 +51,12 @@ fi
 ## Sourcing files here because otherwise the directory will change and will no longer work
 # Getting deployment types definitions
 # shellcheck source=deployments/deploy-types.sh
-source "$curr_dir/deploy-types.sh"
+source "$deploy_curr_dir/deploy-types.sh"
 # Get slack messaging functions
 # shellcheck source=slack/messaging.sh
-source "$curr_dir/../slack/messaging.sh"
+source "$deploy_curr_dir/../slack/messaging.sh"
 
-pushd "$curr_dir/$project" > /dev/null
+pushd "$deploy_curr_dir/$project" > /dev/null
 if ! MSG="$(git fetch origin 2>&1)"; then
     >&2 echo "-> Problem in git fetch on $project"
     >&2 echo "$MSG"
