@@ -27,7 +27,7 @@ CD will be setup. In order to be eligible to do so, a project must follow certai
 - Have branch protection rules in place for at least the `master` branch (really don't want to handle broken deploys :( )
 - Provide a `Dockerfile-prod` that when built and ran exposes a running server to port 80 (which is then remapped in the `docker run` command) - there are some examples available in `dockerfile-templates/`
     * A `PORT` env variable with the value of `80` will also be passed when running, so you can also rely on that if you ensure that that works.
-    * Simillarly, it is also possible to rely on `.env*` configuration files (mapped in `deployments/project-configs.sh`)
+    * Similarly, it is also possible to rely on `.env*` configuration files (mapped in `deployments/project-configs.sh`)
 - Finally, get in touch with the current maintainer of this project (should be the deployers github team - but in case of doubt, yell in Slack).
 
 **Note:** Currently all of the projects must be running a daemon exposing a port. Static builds should use something like nginx to expose the built files. (See `dockerfile-templates/Dockerfile-react` as an example of this)
@@ -39,4 +39,4 @@ For further details, take a look at `deployments/`.
 
 ## Secret Management
 
-Obviously, especially since this not a private repo (and even if it were!) secrets are not to be used here. Instead use other options such as environment variables or relying on local configuration files (such as `.env`s, for example).
+Obviously, especially since this is not a private repo (and even if it were!) secrets are not to be used here. Instead use other options such as environment variables or relying on local configuration files (such as `.env`s, for example).
