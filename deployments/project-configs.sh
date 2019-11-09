@@ -19,10 +19,10 @@ project_dotenv_location[NIAEFEUP-Website---master]='/home/ni/niployments/deploym
 # (Thanks to this modular config, it is possible to also deploy staging (painlessly!))
 # nijobs-fe
 project_port[nijobs-fe---master]=4001
-# project_dotenv_location[nijobs-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-fe/master/.env'
+project_dotenv_location[nijobs-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-fe/master/.env'
 ## nijobs-fe staging
 project_port[nijobs-fe---develop]=4002
-# project_dotenv_location[nijobs-fe---develop]='/home/ni/niployments/deployments/env-files/nijobs-fe/master/.env'
+project_dotenv_location[nijobs-fe---develop]='/home/ni/niployments/deployments/env-files/nijobs-fe/develop/.env'
 
 # nijobs-be
 project_port[nijobs-be---master]=4010
