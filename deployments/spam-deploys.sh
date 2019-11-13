@@ -16,10 +16,17 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
 # Configure the projects to automatically deploy below here
 
 # nijobs-be
-("$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be develop) &
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be master;
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-be develop
+) &
 
 # nijobs-fe
-("$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe develop) &
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe master;
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe develop;
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe experimental
+) &
 
 # NIAEFEUP-Website
 # Currently on hold until some changes are done

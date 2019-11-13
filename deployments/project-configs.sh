@@ -23,6 +23,9 @@ project_dotenv_location[nijobs-fe---master]='/home/ni/niployments/deployments/en
 ## nijobs-fe staging
 project_port[nijobs-fe---develop]=4002
 project_dotenv_location[nijobs-fe---develop]='/home/ni/niployments/deployments/env-files/nijobs-fe/develop/.env'
+## nijobs-fe experimental (pre-develop, "true staging" vs staging=beta/nightly)
+project_port[nijobs-fe---experimental]=4003
+project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployments/env-files/nijobs-fe/experimental/.env'
 
 # nijobs-be
 project_port[nijobs-be---master]=4010
