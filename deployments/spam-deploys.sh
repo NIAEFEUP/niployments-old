@@ -28,9 +28,11 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe experimental
 ) &
 
-# NIAEFEUP-Website
-# Currently on hold until some changes are done
-# ("$spam_deploys_curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode NIAEFEUP-Website develop) &
+# Website-NIAEFEUP
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode Website-NIAEFEUP master;
+    # "$spam_deploys_curr_dir/deploy.sh" --cron-mode Website-NIAEFEUP develop
+) &
 
 # tts-fe
 # Currently on hold until the React port is done
