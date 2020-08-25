@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of git id name thing of the projects configured for autodeploy
-configured_projects="NIAEFEUP-Website tts-fe nijobs-fe nijobs-be"
+configured_projects="Website-NIAEFEUP tts-fe nijobs-fe nijobs-be"
 
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
@@ -12,9 +12,9 @@ configured_projects="NIAEFEUP-Website tts-fe nijobs-fe nijobs-be"
 declare -A project_port
 declare -A project_dotenv_location
 
-# NIAEFEUP-Website
-project_port[NIAEFEUP-Website---master]=3000
-project_dotenv_location[NIAEFEUP-Website---master]='/home/ni/niployments/deployments/env-files/NIAEFEUP-Website/master/.env'
+# Website-NIAEFEUP
+project_port[Website-NIAEFEUP---master]=3000
+project_dotenv_location[Website-NIAEFEUP---master]='/home/ni/niployments/deployments/env-files/Website-NIAEFEUP/master/.env'
 
 # (Thanks to this modular config, it is possible to also deploy staging (painlessly!))
 # nijobs-fe
