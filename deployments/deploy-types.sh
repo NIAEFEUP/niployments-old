@@ -6,10 +6,15 @@
 # See https://sipb.mit.edu/doc/safe-shell/
 set -ueo pipefail
 
+function to_lower_case() {
+    echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
 # For deploying stuff with docker, simply put.
 function deploy_default() {
     # (dotenv_location is not mandatory)
-    local project="$1" branch="$2" image_tag="$project---$branch" port="$3" dotenv_location="${4:-}"
+    local project="$1" branch="$2" image_tag port="$3" dotenv_location="${4:-}"
+    image_tag="$(to_lower_case "$project---$branch" )"
 
     # If we have a dotenv file specified, copy it into the current directory (in case of error, `cp` prints something so no need to echo anything)
     [[ -n "$dotenv_location" ]] && cp "$dotenv_location" . && echo "#-> Copied dotenv file successfully"
