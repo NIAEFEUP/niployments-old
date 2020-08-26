@@ -11,6 +11,12 @@ Current apache version (will probably quickly become outdated, verify this alway
 Since the configs were changed to become more modular, they also require the configuration of apache envvars to work correctly.
 See [configuring apache envvars](#configuring-apache-envvars) for details on how to do this.
 
+Additionally, the apache server will have to have the following mods enabled:
+* `expires` (For `files.conf` setting cache expiration on things)
+* `rewrite` (For enabling RewriteEngine and related stuff in `routing.conf`)
+* `proxy_http` (For the reverse proxying in `routing.conf`)
+* `ssl` for obvious reasons I'd say? :grin:
+
 
 ## Structure
 
@@ -26,6 +32,10 @@ To add a site, just add its configuration to the `sites` directory. Make sure to
 If possible, test the configuration in your computer, including running `apachectl configtest` to verify the validity of the syntax.
 
 After adding a site, don't forget that is not enabled by default. See [this section](#enabling-sites) for details on how to enable a site.
+
+**Note:** When extending what was done in `routing.conf`, if using automated deployments via Docker, do not use `http://ni.fe.up.pt:3000` (3000 is just an example, this goes for any port) as this will not work.
+Use `http://localhost:3000` instead. I'm not entirely sure why this happens but it was the case when setting the server back up again.
+As such, using localhost is recommended since it works for both cases.
 
 
 ## Enabling sites
