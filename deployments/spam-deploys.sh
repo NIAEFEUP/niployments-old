@@ -35,5 +35,7 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
 ) &
 
 # tts-fe
-# Currently on hold until the React port is done
-# ("$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe develop) &
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; 
+    #"$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe develop
+) &
