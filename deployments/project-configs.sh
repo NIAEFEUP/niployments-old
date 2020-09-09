@@ -33,8 +33,13 @@ project_dotenv_location[nijobs-be---master]='/home/ni/niployments/deployments/en
 ## nijobs-be staging
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
+
+# tts-fe
+project_port[tts-fe---master]=8000
+project_dotenv_location[tts-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env'
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
+
 
 
 # Essential, duh! :)
