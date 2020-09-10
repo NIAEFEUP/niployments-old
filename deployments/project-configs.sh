@@ -18,6 +18,7 @@ project_dotenv_location[Website-NIAEFEUP---master]='/home/ni/niployments/deploym
 
 # tts
 project_port[tts-fe---master]=3100
+project_dotenv_location[tts-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env'
 
 # (Thanks to this modular config, it is possible to also deploy staging (painlessly!))
 # nijobs-fe
