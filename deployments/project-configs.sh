@@ -15,6 +15,8 @@ declare -A project_dotenv_location
 # Website-NIAEFEUP
 project_port[Website-NIAEFEUP---master]=3000
 project_dotenv_location[Website-NIAEFEUP---master]='/home/ni/niployments/deployments/env-files/Website-NIAEFEUP/master/.env'
+project_port[Website-NIAEFEUP---develop]=3001
+project_dotenv_location[Website-NIAEFEUP---develop]='/home/ni/niployments/deployments/env-files/Website-NIAEFEUP/develop/.env'
 
 # tts
 project_port[tts-fe---master]=3100
