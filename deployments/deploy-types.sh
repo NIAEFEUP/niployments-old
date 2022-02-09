@@ -54,10 +54,11 @@ function deploy_default() {
     # Deploying project Docker container
     echo -e "###-> Running new container\n#-> Will listen on port $port!\n"
     if [[ -n "$docker_volume" ]]; then
-        docker run -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
-    else
         echo -e "\n###-> Linking docker volume: $docker_volume\n"
         docker run -v "$docker_volume" -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
+    else
+        echo -e "\n###-> No docker volume specified.\n"
+        docker run -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
     fi
     local run_status="$?"
     if [ "$run_status" != 0 ]; then

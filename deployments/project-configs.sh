@@ -37,11 +37,11 @@ project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployme
 # nijobs-be
 project_port[nijobs-be---master]=4010
 project_dotenv_location[nijobs-be---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env.local'
-project_docker_volume[nijobs-be---master]='/home/ni/niployments/deployments/static/nijobs:/static'
+project_docker_volume[nijobs-be---master]='/home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
 ## nijobs-be staging
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
-project_docker_volume[nijobs-be---develop]='/home/ni/niployments/deployments/static/nijobs:/static'
+project_docker_volume[nijobs-be---develop]='/home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 

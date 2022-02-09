@@ -110,7 +110,7 @@ set +e
     echo "###-> Deploying $project at $branch@$rev"
     echo
     
-    # Passing in the configs from ./project-configs.sh. dotenv_location might not be set so sending instead an empty variable ("") so that the 'unbound variable' error does not occur
+    # Passing in the configs from ./project-configs.sh. dotenv_location and docker_volume might not be set so sending instead an empty variable ("") so that the 'unbound variable' error does not occur
     deploy_default "$project" "$branch" "${project_port[$project---$branch]}" "${project_dotenv_location[$project---$branch]:-}" "${project_docker_volume[$project---$branch]:-}"
 ) 2>&1 | tee "$logfile"
 
