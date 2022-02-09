@@ -111,7 +111,7 @@ set +e
     echo
     
     # Passing in the configs from ./project-configs.sh. dotenv_location might not be set so sending instead an empty variable ("") so that the 'unbound variable' error does not occur
-    deploy_default "$project" "$branch" "${project_port[$project---$branch]}" "${project_dotenv_location[$project---$branch]:-}"
+    deploy_default "$project" "$branch" "${project_port[$project---$branch]}" "${project_dotenv_location[$project---$branch]:-}" "${project_docker_volume[$project---$branch]:-}"
 ) 2>&1 | tee "$logfile"
 
 # This gets the return status of the first element of the previous pipe, aka the subshell executing the deployment commands

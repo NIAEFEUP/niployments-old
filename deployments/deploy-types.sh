@@ -13,7 +13,7 @@ function to_lower_case() {
 # For deploying stuff with docker, simply put.
 function deploy_default() {
     # (dotenv_location is not mandatory)
-    local project="$1" branch="$2" image_tag port="$3" dotenv_location="${4:-}"
+    local project="$1" branch="$2" image_tag port="$3" dotenv_location="${4:-}" docker_volume="${5:-}"
     image_tag="$(to_lower_case "$project---$branch" )"
 
     # If we have a dotenv file specified, copy it into the current directory (in case of error, `cp` prints something so no need to echo anything)
@@ -51,8 +51,14 @@ function deploy_default() {
 	    echo "###-> No container was previously running! Continuing..."
     fi    
 
+    # Deploying project Docker container
     echo -e "###-> Running new container\n#-> Will listen on port $port!\n"
-    docker run -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
+    if [[ -n "$docker_volume" ]]; then
+        docker run -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
+    else
+        echo -e "\n###-> Linking docker volume: $docker_volume\n"
+        docker run -v "$docker_volume" -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
+    fi
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
         >&2 echo -e "\n###-> ERROR! Run failed!"
