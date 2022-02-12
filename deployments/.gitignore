@@ -4,6 +4,7 @@
 !deploy.sh
 !deploy-types.sh
 !spam-deploys.sh
+!health-checker.sh
 !README.md
 # Also, the project configurations!
 !project-configs.sh

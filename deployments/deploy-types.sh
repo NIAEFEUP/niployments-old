@@ -10,10 +10,13 @@ function to_lower_case() {
     echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
+# shellcheck source=deployments/health-checker.sh
+source "$deploy_curr_dir/health-checker.sh"
+
 # For deploying stuff with docker, simply put.
 function deploy_default() {
-    # (dotenv_location is not mandatory)
-    local project="$1" branch="$2" image_tag port="$3" dotenv_location="${4:-}" docker_flags="${5:-}"
+    # (dotenv_location, docker_flags and health_check_url are not mandatory)
+    local project="$1" branch="$2" image_tag port="$3" dotenv_location="${4:-}" docker_flags="${5:-}" health_check_url="${6:-}"
     image_tag="$(to_lower_case "$project---$branch" )"
 
     # If we have a dotenv file specified, copy it into the current directory (in case of error, `cp` prints something so no need to echo anything)
@@ -73,6 +76,53 @@ function deploy_default() {
             echo "###->> No old container found for starting back up!!"
         fi
         return "$run_status"
+    fi
+
+    local health_check_result
+    health_check_result=1
+    if [ $health_check_url ]; then
+        echo -e "Starting health check...\n"
+        health_checker $health_check_url || true
+        health_check_result="$?"
+    fi
+
+    if [ "$health_check_result" != 0 ]; then
+	    >&2 echo -e "\n###-> ERROR! Service did not pass the health check! Rolling back to previous container!"
+	    
+        local new_container_id
+        new_container_id="$(docker ps -aq --filter ancestor="$image_tag")"
+
+        local new_image_id
+        new_image_id="$(docker images -q "$image_tag")"
+        
+        docker stop "$new_container_id" &>/dev/null
+    	printf "New container exit code: "
+    	docker wait "$new_container_id"
+    	echo -e "\n###-> New container stopped.\n"
+        
+        >&2 echo "###-> Retagging old image and starting old container back up"
+        if [[ -n "$old_image_id" ]]; then
+            docker tag "$old_image_id" "$image_tag"
+        else
+            echo "###->> No old image found for retagging!!"
+        fi
+        if [[ -n "$old_container_id" ]]; then
+            docker start "$old_container_id"
+        else
+            echo "###->> No old container found for starting back up!!"
+        fi
+
+        echo "###->> Removing new (un-healthy) container"
+        docker rm "$new_container_id"
+
+        if [[ "$(docker images -q "$image_tag")" == "$new_image_id" ]]; then
+	        echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
+	    else
+	        printf "old image id: "
+           docker rmi "$new_image_id"
+	    fi
+        
+        return 1
     fi
 
     # Cleanup
