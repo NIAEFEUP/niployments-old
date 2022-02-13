@@ -10,7 +10,11 @@ function to_lower_case() {
     echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
-# shellcheck source=deployments/health-checker.sh
+# Adaptation of https://stackoverflow.com/questions/192292/how-best-to-include-other-scripts
+deploy_curr_dir="${BASH_SOURCE%/*}"
+if [[ ! -d "$deploy_curr_dir" ]]; then deploy_curr_dir="${0%/*}"; fi
+
+# shellcheck source=/dev/null
 source "$deploy_curr_dir/health-checker.sh"
 
 # For deploying stuff with docker, simply put.
@@ -31,7 +35,10 @@ function deploy_default() {
     old_container_id="$(docker ps -aq --filter ancestor="$image_tag")"
 
     echo -e "Starting docker build\n"
-    docker build -f Dockerfile-prod -t "$image_tag" .
+    
+    local new_image_id
+    new_image_id=$(docker build -q -f Dockerfile-prod -t "$image_tag" .)
+    
     local build_status="$?"
 
     # Disabled as this meant that no dependencies could be cached. Instead run `docker system prune` periodically to clear up disk space if necessary.
@@ -60,7 +67,10 @@ function deploy_default() {
     else
         echo -e "#-> No docker flags specified.\n"
     fi
-    echo "${docker_flags:-} -d --restart=unless-stopped --env PORT=80 -p $port:80 $image_tag" | xargs docker run
+    
+    local new_container_id
+    new_container_id=$(echo "${docker_flags:-} -d --restart=unless-stopped --env PORT=80 -p $port:80 $image_tag" | xargs docker run)
+    
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
         >&2 echo -e "\n###-> ERROR! Run failed!"
@@ -78,51 +88,45 @@ function deploy_default() {
         return "$run_status"
     fi
 
-    local health_check_result
-    health_check_result=1
-    if [ $health_check_url ]; then
-        echo -e "Starting health check...\n"
-        health_checker $health_check_url || true
-        health_check_result="$?"
-    fi
+    local health_check_result=0
+    if [[ -n "$health_check_url" ]]; then
+        echo -e "###->Starting health check...\n"
+        # This is done this way due to the use of set -e above.
+        # If the command is successful, the || won't run, so the default value is 0
+        # if the command is not successful, we need the || so that the script does not exit immediately 
+        health_checker "$health_check_url" || health_check_result="$?"
 
-    if [ "$health_check_result" != 0 ]; then
-	    >&2 echo -e "\n###-> ERROR! Service did not pass the health check! Rolling back to previous container!"
-	    
-        local new_container_id
-        new_container_id="$(docker ps -aq --filter ancestor="$image_tag")"
+        if [ "$health_check_result" != 0 ]; then
+            >&2 echo -e "\n###-> ERROR! Service did not pass the health check! Rolling back to previous container!"
+            
+            docker stop "$new_container_id" &>/dev/null
+            docker wait "$new_container_id"
+            echo -e "\n###-> New container stopped.\n"
+            
+            >&2 echo "###-> Retagging old image and starting old container back up"
+            if [[ -n "$old_image_id" ]]; then
+                docker tag "$old_image_id" "$image_tag"
+            else
+                >&2 echo "###->> No old image found for retagging!!"
+            fi
+            if [[ -n "$old_container_id" ]]; then
+                docker start "$old_container_id"
+            else
+                >&2 echo "###->> No old container found for starting back up!!"
+            fi
 
-        local new_image_id
-        new_image_id="$(docker images -q "$image_tag")"
-        
-        docker stop "$new_container_id" &>/dev/null
-    	printf "New container exit code: "
-    	docker wait "$new_container_id"
-    	echo -e "\n###-> New container stopped.\n"
-        
-        >&2 echo "###-> Retagging old image and starting old container back up"
-        if [[ -n "$old_image_id" ]]; then
-            docker tag "$old_image_id" "$image_tag"
-        else
-            echo "###->> No old image found for retagging!!"
+            >&2 echo "###->> Removing new (un-healthy) container"
+            docker rm "$new_container_id"
+
+            if [[ "$(docker images -q "$image_tag")" == "$new_image_id" ]]; then
+                >&2 echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
+            else
+                printf "Removed new image with id: "
+                docker rmi "$new_image_id"
+            fi
+            
+            return 1
         fi
-        if [[ -n "$old_container_id" ]]; then
-            docker start "$old_container_id"
-        else
-            echo "###->> No old container found for starting back up!!"
-        fi
-
-        echo "###->> Removing new (un-healthy) container"
-        docker rm "$new_container_id"
-
-        if [[ "$(docker images -q "$image_tag")" == "$new_image_id" ]]; then
-	        echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
-	    else
-	        printf "old image id: "
-           docker rmi "$new_image_id"
-	    fi
-        
-        return 1
     fi
 
     # Cleanup
@@ -139,7 +143,7 @@ function deploy_default() {
 	        echo "###-> Not removing image, as the container was run using the same one (build did a full cache hit)"
 	    else
 	        printf "old image id: "
-           docker rmi "$old_image_id"
+            docker rmi "$old_image_id"
 	    fi
     else
 	    echo "###-> No old image found, so none removed."

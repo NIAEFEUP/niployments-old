@@ -19,8 +19,6 @@ function is_healthy_url() {
     else
         echo 1
     fi
-
-    return 0
 }
 
 # Periodically calls a given url until it returns HTTP 200, or max retries is reached. 
@@ -30,8 +28,8 @@ function health_checker() {
     local url="$1"
 
     # According to 1 retry every 10 seconds, this will try for 5 minutes
-    local MAX_ATTEMPTS=26
-    local RETRY_INTERVAL_SECONDS=1
+    local MAX_ATTEMPTS=31
+    local RETRY_INTERVAL_SECONDS=10
 
     local is_healthy_result=1
     local retry_count=0

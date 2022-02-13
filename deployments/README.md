@@ -21,6 +21,10 @@ The `port` is mandatory, but the `env_file_path` and `docker_flags` are optional
 
 The paths provided in the said file **MUST** be **absolute** (trust me you don't want to handle bash's path spaghetti :upside_down_face: :wink:).
 
+#### Deployment Health Checks and Rollbacks
+
+You can set a `project_health_check_url` per project, which will be used to assert the service is running properly after deployment. The deploy script will query the url (using cURL) every 10 seconds until it returns HTTP 200, for a maximum of 5 minutes. It is advised that you pass a url served by the respective service which only returns 200 when the service is in good operating state. This variable is optional. If it is not provided, the health check will not be done. 
+
 ## Notes
 
 `docker system prune` should be run periodically to clean up dangling images and containers. The deployment scripts attempt to minimize the number of these but some are left on purpose due to speeding up multi-stage builds.

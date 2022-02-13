@@ -39,12 +39,12 @@ project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployme
 project_port[nijobs-be---master]=4010
 project_dotenv_location[nijobs-be---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env.local'
 project_docker_flags[nijobs-be---master]='-v /home/ni/niployments/deployments/volumes-data/nijobs:/usr/src/app/static'
-project_health_check_url[nijobs-be---master]='https://localhost:${project_port[nijobs-be---master]}/'
+project_health_check_url[nijobs-be---master]="https://localhost:${project_port[nijobs-be---master]}/"
 ## nijobs-be staging
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 project_docker_flags[nijobs-be---develop]='-v /home/ni/niployments/deployments/volumes-data/nijobs-beta:/usr/src/app/static'
-project_health_check_url[nijobs-be---develop]='https://localhost:${project_port[nijobs-be---develop]}/'
+project_health_check_url[nijobs-be---develop]="https://localhost:${project_port[nijobs-be---develop]}/"
 
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
