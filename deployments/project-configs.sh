@@ -11,7 +11,7 @@ configured_projects="Website-NIAEFEUP tts-fe nijobs-fe nijobs-be"
 
 declare -A project_port
 declare -A project_dotenv_location
-declare -A project_docker_volume
+declare -A project_docker_flags
 
 # Website-NIAEFEUP
 project_port[Website-NIAEFEUP---master]=3000
@@ -37,16 +37,16 @@ project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployme
 # nijobs-be
 project_port[nijobs-be---master]=4010
 project_dotenv_location[nijobs-be---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env.local'
-project_docker_volume[nijobs-be---master]='/home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
+project_docker_flags[nijobs-be---master]='-v /home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
 ## nijobs-be staging
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
-project_docker_volume[nijobs-be---develop]='/home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
+project_docker_flags[nijobs-be---develop]='-v /home/ni/niployments/deployments/static/nijobs:/usr/src/app/static'
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 
 # Essential, duh! :)
 export project_port
 export project_dotenv_location
-export project_docker_volume
+export project_docker_flags
 export configured_projects
