@@ -57,7 +57,7 @@ function deploy_default() {
     else
         echo -e "#-> No docker flags specified.\n"
     fi
-    docker run "${docker_flags:-}" -d --restart=unless-stopped --env PORT=80 -p "$port:80" "$image_tag"
+    echo "${docker_flags:-} -d --restart=unless-stopped --env PORT=80 -p $port:80 $image_tag" | xargs docker run
     local run_status="$?"
     if [ "$run_status" != 0 ]; then
         >&2 echo -e "\n###-> ERROR! Run failed!"
