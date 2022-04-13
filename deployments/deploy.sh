@@ -24,7 +24,7 @@ branch="${2:-master}"
 # shellcheck source=utils/utils.sh
 source "$deploy_curr_dir/../utils/utils.sh"
 
-# Getting project configurations (configured_projects, project_port and project_dotenv_location)
+# Getting project configurations (configured_projects, project_port, project_dotenv_location and project_health_check_url)
 # shellcheck source=deployments/project-configs.sh
 source "$deploy_curr_dir/project-configs.sh"
 
@@ -111,7 +111,7 @@ set +e
     echo
     
     # Passing in the configs from ./project-configs.sh. dotenv_location and docker_flags might not be set so sending instead an empty variable ("") so that the 'unbound variable' error does not occur
-    deploy_default "$project" "$branch" "${project_port[$project---$branch]}" "${project_dotenv_location[$project---$branch]:-}" "${project_docker_flags[$project---$branch]:-}"
+    deploy_default "$project" "$branch" "${project_port[$project---$branch]}" "${project_dotenv_location[$project---$branch]:-}" "${project_docker_flags[$project---$branch]:-}" "${project_health_check_url[$project---$branch]:-}"
 ) 2>&1 | tee "$logfile"
 
 # This gets the return status of the first element of the previous pipe, aka the subshell executing the deployment commands
