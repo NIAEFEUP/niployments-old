@@ -28,12 +28,6 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe experimental
 ) &
 
-# Website-NIAEFEUP 
-(
-    # "$spam_deploys_curr_dir/deploy.sh" --cron-mode Website-NIAEFEUP master;
-    "$spam_deploys_curr_dir/deploy.sh" --cron-mode Website-NIAEFEUP develop
-) &
-
 # tts-fe
 (
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; 
