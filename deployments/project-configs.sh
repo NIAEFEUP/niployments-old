@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of git id name thing of the projects configured for autodeploy
-configured_projects="Website-NIAEFEUP tts-fe nijobs-fe nijobs-be"
+configured_projects="tts-fe nijobs-fe nijobs-be"
 
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
@@ -13,12 +13,6 @@ declare -A project_port
 declare -A project_dotenv_location
 declare -A project_docker_flags
 
-# Website-NIAEFEUP
-project_port[Website-NIAEFEUP---master]=3000
-project_dotenv_location[Website-NIAEFEUP---master]='/home/ni/niployments/deployments/env-files/Website-NIAEFEUP/master/.env'
-project_port[Website-NIAEFEUP---develop]=3001
-project_dotenv_location[Website-NIAEFEUP---develop]='/home/ni/niployments/deployments/env-files/Website-NIAEFEUP/develop/.env'
-
 # tts
 project_port[tts-fe---master]=3100
 project_dotenv_location[tts-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env'
@@ -27,9 +21,11 @@ project_dotenv_location[tts-fe---master]='/home/ni/niployments/deployments/env-f
 # nijobs-fe
 project_port[nijobs-fe---master]=4001
 project_dotenv_location[nijobs-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-fe/master/.env'
+
 ## nijobs-fe staging
 project_port[nijobs-fe---develop]=4002
 project_dotenv_location[nijobs-fe---develop]='/home/ni/niployments/deployments/env-files/nijobs-fe/develop/.env'
+
 ## nijobs-fe experimental (pre-develop, "true staging" vs staging=beta/nightly)
 project_port[nijobs-fe---experimental]=4003
 project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployments/env-files/nijobs-fe/experimental/.env'
@@ -38,6 +34,7 @@ project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployme
 project_port[nijobs-be---master]=4010
 project_dotenv_location[nijobs-be---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env.local'
 project_docker_flags[nijobs-be---master]='-v /home/ni/niployments/deployments/volumes-data/nijobs:/usr/src/app/static'
+
 ## nijobs-be staging
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
