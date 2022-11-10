@@ -33,7 +33,7 @@ If possible, test the configuration in your computer, including running `apachec
 
 After adding a site, don't forget that is not enabled by default. See [this section](#enabling-sites) for details on how to enable a site.
 
-**Note:** When extending what was done in `routing.conf`, if using automated deployments via Docker, do not use `http://ni.fe.up.pt:3000` (3000 is just an example, this goes for any port) as this will not work.
+**Note:** When extending what was done in `routing.conf`, if using automated deployments via Docker, do not use `http://nitmp.fe.up.pt:3000` (3000 is just an example, this goes for any port) as this will not work.
 Use `http://localhost:3000` instead. I'm not entirely sure why this happens but it was the case when setting the server back up again.
 As such, using localhost is recommended since it works for both cases.
 
@@ -64,4 +64,4 @@ They should be configured in `/etc/apache2/envvars` (the default apache envvars 
 They are the following:
 
 - `CONFIG_MODULES_DIR` - The directory in which the files in `config-modules` are stored, so that they can be included in the site definition files.
-- `CERTIFICATES_DIR` - The directory where SSL certificates and such are stored (probably something like `/home/ni/certificates/`).
+- `CERTIFICATES_DIR` - The directory where SSL certificates and such are stored (probably something like `/home/ubuntu/certificates/`).
