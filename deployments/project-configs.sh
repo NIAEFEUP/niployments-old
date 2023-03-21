@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of git id name thing of the projects configured for autodeploy
-configured_projects="tts-fe nijobs-fe nijobs-be"
+configured_projects="tts-revamp-fe tts-be nijobs-fe nijobs-be"
 
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
@@ -13,9 +13,13 @@ declare -A project_port
 declare -A project_dotenv_location
 declare -A project_docker_flags
 
-# tts
-project_port[tts-fe---master]=3100
-project_dotenv_location[tts-fe---master]='/home/ni/niployments/deployments/env-files/nijobs-be/master/.env'
+# tts-revamp-fe
+project_port[tts-revamp-fe---develop]=3100
+project_dotenv_location[tts-revamp-fe---develop]='/home/ni/niployments/deployments/env-files/tts-revamp-fe/master/.env'
+
+# tts-be
+project_port[tts-be---develop]=3200
+project_dotenv_location[tts-be---develop]='/home/ni/niployments/deployments/env-files/tts-be/master/.env'
 
 # (Thanks to this modular config, it is possible to also deploy staging (painlessly!))
 # nijobs-fe
@@ -25,10 +29,6 @@ project_dotenv_location[nijobs-fe---master]='/home/ni/niployments/deployments/en
 ## nijobs-fe staging
 project_port[nijobs-fe---develop]=4002
 project_dotenv_location[nijobs-fe---develop]='/home/ni/niployments/deployments/env-files/nijobs-fe/develop/.env'
-
-## nijobs-fe experimental (pre-develop, "true staging" vs staging=beta/nightly)
-project_port[nijobs-fe---experimental]=4003
-project_dotenv_location[nijobs-fe---experimental]='/home/ni/niployments/deployments/env-files/nijobs-fe/experimental/.env'
 
 # nijobs-be
 project_port[nijobs-be---master]=4010
