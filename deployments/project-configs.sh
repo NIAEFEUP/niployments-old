@@ -39,6 +39,11 @@ project_docker_flags[nijobs-be---master]='-v /home/ni/niployments/deployments/vo
 project_port[nijobs-be---develop]=4011
 project_dotenv_location[nijobs-be---develop]='/home/ni/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 project_docker_flags[nijobs-be---develop]='-v /home/ni/niployments/deployments/volumes-data/nijobs-beta:/usr/src/app/static'
+
+## nijobs-locations
+project_port[nijobs-locations---main]=4012
+project_dotenv_location[nijobs-locations---main]='/home/ni/niployments/deployments/env-files/nijobs-locations/main/.env'
+
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 

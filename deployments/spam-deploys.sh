@@ -25,7 +25,10 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
 (
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe master;
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe develop;
-    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-fe experimental
+) &
+
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-locations main;
 ) &
 
 # tts-fe
