@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of git id name thing of the projects configured for autodeploy
-configured_projects="tts-revamp-fe tts-be nijobs-fe nijobs-be"
+configured_projects="tts-revamp-fe tts-be nijobs-fe nijobs-be nijobs-locations"
 
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
