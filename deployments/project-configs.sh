@@ -46,8 +46,8 @@ project_dotenv_location[nijobs-locations---main]='/home/ni/niployments/deploymen
 
 ## pixel wars
 
-project_port[pixel-wars--main]=4018
-
+project_port[pixel-wars---main]=4018
+project_docker_flags[pixel-wars---main]='--network=redis_network --env REDIS_SERVER="pixelwarsRedis"'
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
 
