@@ -31,6 +31,10 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode nijobs-locations main;
 ) &
 
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode pixel-wars main;
+) &
+
 # tts-fe
 (
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; 
