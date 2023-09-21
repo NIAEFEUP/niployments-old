@@ -40,3 +40,6 @@ if [[ ! -d "$spam_deploys_curr_dir" ]]; then spam_deploys_curr_dir="${0%/*}"; fi
     "$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe master; 
     #"$spam_deploys_curr_dir/deploy.sh" --cron-mode tts-fe develop
 ) &
+(
+    "$spam_deploys_curr_dir/deploy.sh" --cron-mode nitsig-website main;
+) &
