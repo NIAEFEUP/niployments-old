@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of git id name thing of the projects configured for autodeploy
-configured_projects="tts-revamp-fe tts-be nijobs-fe nijobs-be nijobs-locations pixel-wars"
+configured_projects="tts-revamp-fe tts-be nijobs-fe nijobs-be nijobs-locations pixel-wars nitsig-website"
 
 # Configuration of each project's port and env file location
 # Uses bash dictionaries: https://devhints.io/bash#dictionaries
@@ -50,6 +50,10 @@ project_port[pixel-wars---main]=4018
 project_docker_flags[pixel-wars---main]='--network=redis_network --env REDIS_SERVER="pixelwarsRedis"'
 # debug example:
 # project_dotenv_location[nijobs-be---develop]='/home/miguel/Coding/NIAEFEUP/niployments/deployments/env-files/nijobs-be/develop/.env.local'
+
+
+## nitsig-website
+project_port[nitsig-website---main]=4019
 
 # Essential, duh! :)
 export project_port
