@@ -1,5 +1,7 @@
 # niployments
-[![CircleCI](https://circleci.com/gh/NIAEFEUP/niployments/tree/master.svg?style=svg)](https://circleci.com/gh/NIAEFEUP/niployments/tree/master)
+
+> [!IMPORTANT]
+> This is the old version of NIployments, used circa 2019 until 2024, now we use a Kubernetes-based system that you can access at [new NIployments repo](https://github.com/NIAEFEUP/niployments).
 
 Repository to manage and document NIAEFEUP's deployments.
 
